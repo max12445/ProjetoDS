@@ -22,14 +22,23 @@ class GameController {
         }
     }
 
+
     static async getAll(req, res) {
         try {
-            const games = await Game.find();
+            const { genero, valor } = req.query;
+            let filtro = { isActive: true };
+            if (genero) { filtro.genero = genero;}
+            if (valor) { filtro.valor = valor;}
+            const games = await Game.find(filtro);
             return res.status(200).json({ data: games });
         } catch (error) {
-            return res.status(500).json({ message: 'Erro ao encontrar Game', error: error.message });
+            return res.status(500).json({
+                message: 'Erro ao encontrar Game',
+                error: error.message
+            });
         }
     }
+
 
     static async getById(req, res) {
         try {
@@ -70,7 +79,11 @@ class GameController {
     static async delete(req, res) {
         try {
             const { id } = req.params;
-            const deletedGame = await Game.findByIdAndDelete(id);
+            const deletedGame = await Game.findByIdAndUpdate(
+                id,
+                { isActive: false },
+                { new: true }
+            );
             if (!deletedGame) {
                 return res.status(404).json({ message: 'Game não encontrada' });
             }
