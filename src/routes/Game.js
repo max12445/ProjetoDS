@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const PersonController = require('../controllers/GameController');
+const GameController = require('../controllers/GameController');
 
 router
     .get('/people', GameController.getAll)

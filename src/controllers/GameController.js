@@ -1,43 +1,48 @@
 const Game = require('../models/Game');
 
-class GameController {    
+class GameController {
     static async create(req, res) {
         try {
-            const { name, Genero, valor } = req.body;
-            if (!name || !Genero || !valor) {
+            const { name, genero, valor, friendId } = req.body;
+            if (!name || !genero || !valor) {
                 return res.status(400).json({ message: "Dados inválidos." });
             }
-            
+
             const GameData = {
                 name,
-                Genero,
-                valor
+                genero,
+                valor,
+                friendId
             };
             const newGame = await Game.create(GameData);
             return res.status(201).json({ message: 'Game criada com sucesso', data: newGame });
 
         } catch (error) {
-            return res.status(500).json({ message: 'Erro ao criar o Game', error: error.message });
+            return res.status(500).json({ message: 'Erro ao criar Game', error: error.message });
         }
     }
 
     static async getAll(req, res) {
         try {
-            const people = await Game.find();
-            return res.status(200).json({ data: people });
+            const games = await Game.find();
+            return res.status(200).json({ data: games });
         } catch (error) {
-            return res.status(500).json({ message: 'Erro ao encontrar o Game', error: error.message });
+            return res.status(500).json({ message: 'Erro ao encontrar Game', error: error.message });
         }
     }
 
     static async getById(req, res) {
         try {
             const { id } = req.params;
-            const Game = await Game.findById(id);
-            if (!Game) {
+
+            const game = await Game.findById(id);
+
+            if (!game) {
                 return res.status(404).json({ message: 'Game não encontrada' });
             }
-            return res.status(200).json({ data: Game });
+
+            return res.status(200).json({ data: game });
+
         } catch (error) {
             return res.status(500).json({ message: 'Erro ao encontrar o Game', error: error.message });
         }
@@ -46,17 +51,17 @@ class GameController {
     static async update(req, res) {
         try {
             const { id } = req.params;
-            const { name, Genero, valor } = req.body;
+            const { name, genero, valor } = req.body;
             const updatedData = {
                 name,
-                Genero,
+                genero,
                 valor
             };
             const updatedGame = await Game.findByIdAndUpdate(id, updatedData, { new: true });
             if (!updatedGame) {
                 return res.status(404).json({ message: 'Game não encontrada' });
             }
-            return res.status(200).json({ message: 'Game atualizada com sucesso', data: updatedGame});
+            return res.status(200).json({ message: 'Game atualizada com sucesso', data: updatedGame });
         } catch (error) {
             return res.status(500).json({ message: 'Erro ao atualizar o Game', error: error.message });
         }
