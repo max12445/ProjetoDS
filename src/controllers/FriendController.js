@@ -25,7 +25,7 @@ class FriendController {
 
     static async getAll(req, res) {
         try {
-            const friends = await Friend.find();
+            const friends = await Friend.find({ isActive: true });
 
             return res.status(200).json({ data: friends });
 
@@ -98,7 +98,11 @@ class FriendController {
         try {
             const { id } = req.params;
 
-            const deletedFriend = await Friend.findByIdAndDelete(id);
+            const deletedFriend = await Friend.findByIdAndUpdate(
+                id,
+                { isActive: false },
+                { new: true }
+            );
 
             if (!deletedFriend) {
                 return res.status(404).json({

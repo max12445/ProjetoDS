@@ -3,10 +3,10 @@ const router = express.Router();
 const FriendController = require('../controllers/FriendController');
 
 router
-    .get('/friends', FriendController.getAll)
-    .post('/friends', FriendController.create)
-    .get('/friends/:id', FriendController.getById)
-    .put('/friends/:id', FriendController.update)
-    .delete('/friends/:id', FriendController.delete)
+.get('/', FriendController.getAll)
+.post('/', FriendController.create)
+.get('/:id', FriendController.getById)
+.put('/:id', FriendController.update)
+.delete('/:id', FriendController.delete)
 
 module.exports = router;
